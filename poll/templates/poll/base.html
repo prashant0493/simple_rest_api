@@ -1,0 +1,102 @@
+{% load i18n %}
+{% load bootstrap3 %}
+{% bootstrap_css %}
+{% bootstrap_javascript %}
+
+
+{% load static %}
+
+<!-- jQuery library -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<!-- Latest compiled and minified CSS -->
+<!--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">-->
+<!-- Latest compiled JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+
+{% if company_name == "Walmart" %}
+    <link rel="stylesheet" type="text/css" href="{% static 'agent/css/style_dark.css' %}" />
+{% endif %}
+
+
+
+<head>
+    <title>{% block title %}{% trans 'TEST - GCP' %} {% endblock %}</title>
+</head>
+
+{% block bootstrap3_content %}
+
+
+<nav class="navbar navbar-default">
+  <div class="container-fluid">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="/agent">{% bootstrap_icon "home" %}&nbsp;&nbsp;{% trans 'Home'%}</a>
+    </div>
+
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+      <ul class="nav navbar-nav">
+        {% if user.is_authenticated %}
+        <li class="dropdown">
+              {% for co_name in available_cos %}
+                {% if forloop.counter0 == 0 %}
+                  <a href="/agent/{{ co_name|lower }}/search/" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{% bootstrap_icon "search" %}&nbsp;&nbsp;{{ co_name }}<span class="caret"></span></a>
+                {% elif forloop.counter0 == 1 %}
+                  <ul class="dropdown-menu">
+                  <li><a href="/agent/{{ co_name|lower }}/search/">{{ co_name }}</a></li>
+                {% elif forloop.last %}
+                    <li><a href="/agent/{{ co_name|lower }}/search/">{{ co_name }}</a></li>
+                  </ul>
+                {% else %}
+                  <li><a href="/agent/{{ co_name|lower }}/search/">{{ co_name }}</a></li>
+                {% endif %}
+              {% endfor %}
+          </ul>
+        </li>
+        {% endif %}
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        {% if user.is_authenticated %}
+        <li class="dropdown">
+          <a href="" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{% if request.user.is_authenticated %}{% bootstrap_icon "user" %}&nbsp;&nbsp;{{ request.user.username }}{% endif %}<span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            {% if user.is_superuser %}
+            <li><a href="/admin">{% bootstrap_icon "cog" %} {% trans 'Admin' %}</a></li>
+              <li role="separator" class="divider"></li>
+            {% endif %}
+              <li><a href="/accounts/logout">{% bootstrap_icon "log-out" %}&nbsp;&nbsp;{% trans 'Logout' %}</a></li>
+          </ul>
+        </li>
+        {% else %}
+          <li><a href="/accounts/login">{% bootstrap_icon "log-in" %}&nbsp;&nbsp;{% trans 'Login' %}</a></li>
+        {% endif %}
+      </ul>
+    </div><!-- /.navbar-collapse -->
+  </div><!-- /.container-fluid -->
+</nav>
+
+<div class="row">
+  <div class="col-sm-1"></div>
+  <div class="col-sm-10">
+      <div class="page-header">
+  <h1>GCP - simple REST API <small>{% trans 'API for testing GCP' %} </small></h1>
+</div>
+  </div>
+  <div class="col-sm-1"></div>
+</div>
+
+    <div class="container">
+
+        {% autoescape off %}{% bootstrap_messages %}{% endautoescape %}
+
+        {% block content %}(no content){% endblock %}
+    </div>
+
+{% endblock %}

@@ -1,0 +1,25 @@
+
+{% extends 'poll/base.html' %}
+{% load i18n %}
+{% load bootstrap3 %}
+
+{% block content %}
+
+{% load static %}
+
+
+{% if profiles_len > 1 %}
+	<ul>
+		{% for profile in profiles %}
+        		<li>{{ profile }}</li>
+		{% endfor %}
+	</ul>
+{% else %}
+	<ul>
+        	<li>{{ profiles }}</li>
+	</ul>
+
+{% endif %}
+
+{% endblock %}
+
